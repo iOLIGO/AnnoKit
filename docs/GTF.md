@@ -113,6 +113,27 @@ genes
 more info: The location parameter consists of the chromosome, starting position, and ending position, with a colon between them, like '`{chr}:{start}:{end}`'.
 
 
+#### name2id or id2name
+
+Convert gene name and id to each other
+
+```python
+# n2i
+from annokit.gtf import GTF
+gtf = GTF()
+gtf_file = "./test/test.gtf"
+genes_name = "genename1;genename2"
+gtf.maps(genes_name, mapType='n2i')
+# Warning: not found genename genename2 in gtf
+# "{'genename1':'geneid1', 'genename2':'None'}"
+
+# i2n
+genes_id = "geneid1;geneid2"
+gtf.maps(genes_id, 'i2n')
+# "{'geneid1':'genename1', 'geneid2':'genename2'}"
+```
+
+
 #### annotation type map
 
 annotation type map, the corresponding description relationship between annotation attributes and annotation types description in annotation files.
@@ -147,6 +168,9 @@ gtf.anno_map
 ```
 
 more info: anno_map can modify the gtf description corresponding to multiple attributes at the same time, separated by semicolons, and the attributes and descriptions are separated by commas, like '`{attributes1},{description1};{attributes2},{description2};...;{attributesN},{descriptionN}`'
+
+
+
 
 
 

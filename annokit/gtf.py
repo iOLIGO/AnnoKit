@@ -145,7 +145,7 @@ class GTF:
                 if name in self.anno_map:
                     self.anno_map[name] = gtf_str
                 else:
-                    warnings.warn(f"annotation map err: {name}; maby use key words 'other'", UserWarning)
+                    warnings.warn(f"annotation map err: {name}; maby use key words 'other'", Warning)
 
 
     
@@ -231,7 +231,7 @@ class GTF:
                     gene.trans[trans_id].add_other(other)
                 
                 else:
-                    warnings.warn(f"annotation type err: {anno_type}", UserWarning)
+                    warnings.warn(f"annotation type err: {anno_type}", Warning)
                     self.add_err(line)
             
             self.add_gene(gene)
@@ -246,11 +246,34 @@ class GTF:
         return
     
     # loc = chr:start:end
-    def search(self, loc):
+    def searchLoc(self, loc):
         chrn, start, end = loc.split(":")
         start = int(start)
         end = int(end)
         return self.genes_interval[chrn](start, end)
+
+
+    # genes = {genename1};{genename2};...;{genenameN}
+    def maps(self, genes, mapType="n2i"):
+        dict_map = {}
+        if mapType == "n2i":
+            for name in genes.split(";"):
+                if name in self.genes_map:
+                    dict_map[name] = self.genes_map[name]
+                else:
+                    warnings.warn(f"not found genename {name} in gtf", Warning)
+                    dict_map[name] = "None"
+
+        elif mapType == "i2n":
+            for id in genes.split(";"):
+                if id in self.genes:
+                    dict_map[id] = self.genes[id].name
+                else:
+                    warnings.warn(f"not found geneid {id} in gtf", Warning)
+                    dict_map[id] = "None"
+        else:
+            raise ValueError("params err: please check mapType!")
+        return dict_map
 
 
 

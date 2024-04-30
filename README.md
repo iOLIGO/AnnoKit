@@ -22,5 +22,6 @@ Reference genome annotation file processing toolset
 
 ## GTF
 
-- [API]()
-- [CLI]()
+gtf file analysis
+
+- [GTF](https://github.com/iOLIGO/AnnoKit/blob/main/docs/GTF.md)
