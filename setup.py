@@ -23,7 +23,7 @@ keywords = [
 ]
 
 def get_version():
-    with open("gtf_tools/__init__.py") as f:
+    with open("annokit/__init__.py") as f:
         for line in f.readlines():
             m = re.match("__version__ = '([^']+)'", line)
             if m:
@@ -32,7 +32,7 @@ def get_version():
     
 
 def get_long_description():
-    return "See https://github.com/iOLIGO/gtf_tools"
+    return "See https://github.com/iOLIGO/AnnoKit"
 
 def get_install_requires():
     requirements = []
@@ -51,9 +51,9 @@ setup(
     description='oligo toolkit.',
     long_description=get_long_description(),
     keywords=keywords,
-    url='https://github.com/iOLIGO/gtf_tools',
+    url='https://github.com/iOLIGO/AnnoKit',
     packages=find_packages(),
-    scripts=['scripts/gtf'],
+    scripts=['scripts/*'],
     include_package_data=True,
     zip_safe=False,
     classifiers=classifiers,

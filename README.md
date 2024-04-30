@@ -1,6 +1,6 @@
-# gtf_tools
-gtf tools
+# AnnoKit
 
+Reference genome annotation file processing toolset
 
 ## gene structure
 
