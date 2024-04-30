@@ -3,6 +3,7 @@ import warnings
 from dataclasses import field, dataclass
 from typing import Any, List
 from intervaltree import IntervalTree, Interval
+import pandas as pd
 
 
 @dataclass
@@ -284,6 +285,94 @@ class GTF:
         else:
             raise ValueError("params err: please check mapType!")
         return dict_map
+    
+
+    # genes = {geneid1};{geneid2};...;{geneidN}
+    def inquires(self, genes, itype="id", ilevel="gene"):
+
+        if itype == "id":
+            geneid_list = genes.split(";")
+        elif itype == "name":
+            geneid_list = [self.genes_map[name] for name in genes.split(";")]
+        else:
+            raise ValueError("params err: please check mtype")
+        
+        list_geneid = []
+        list_genename = []
+        list_chr = []
+        list_start = []
+        list_end = []
+        list_strand = []
+        if ilevel == "gene":
+            for geneid in geneid_list:
+                gene = self.genes[geneid]
+                list_geneid.append(gene.id)
+                list_genename.append(gene.name)
+                list_chr.append(gene.chr)
+                list_start.append(gene.start)
+                list_end.append(gene.end)
+                list_strand.append(gene.strand)
+            df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
+                               "chr":list_chr, "start":list_start,
+                               "end":list_end, "strand":list_strand})
+        elif ilevel == "trans":
+            list_transid = []
+            list_transname = []
+            list_transstart = []
+            list_transend = []
+            for geneid in geneid_list:
+                gene = self.genes[geneid]
+                for transid, trans in gene.trans:
+                    list_geneid.append(gene.id)
+                    list_genename.append(gene.name)
+                    list_chr.append(gene.chr)
+                    list_start.append(gene.start)
+                    list_end.append(gene.end)
+                    list_strand.append(gene.strand)
+                    list_transid.append(trans.id)
+                    list_transname.append(trans.name)
+                    list_transstart.append(trans.start)
+                    list_transend.append(trans.end)
+            df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
+                               "chr":list_chr, "start":list_start,
+                               "end":list_end, "strand":list_strand,
+                               "transid":list_transid, "transname":list_transname,
+                               "transstart":list_transstart, "transend":list_transend})
+        elif ilevel == "exon":
+            list_transid = []
+            list_transname = []
+            list_transstart = []
+            list_transend = []
+            list_exonid = []
+            list_exonstart = []
+            list_exonend = []
+            for geneid in geneid_list:
+                gene = self.genes[geneid]
+                for transid, trans in gene.trans:
+                    for exonid, exon in trans.exons:
+                        list_geneid.append(gene.id)
+                        list_genename.append(gene.name)
+                        list_chr.append(gene.chr)
+                        list_start.append(gene.start)
+                        list_end.append(gene.end)
+                        list_strand.append(gene.strand)
+                        list_transid.append(trans.id)
+                        list_transname.append(trans.name)
+                        list_transstart.append(trans.start)
+                        list_transend.append(trans.end)
+                        list_exonid.append(exon.id)
+                        list_exonid.append(exon.start)
+                        list_exonid.append(exon.end)
+            df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
+                               "chr":list_chr, "start":list_start,
+                               "end":list_end, "strand":list_strand,
+                               "transid":list_transid, "transname":list_transname,
+                               "transstart":list_transstart, "transend":list_transend,
+                               "exonid":list_exonid, "exonstart":list_exonstart,
+                               "exonend":list_exonend})
+        else:
+            raise ValueError("params err: please check exon")
+        return df 
 
 
 
