@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+
+from annokit.gtf import GTF
+import argparse
+import os
+
+def Mk_no_dir(dir, recover="N"):
+    if os.path.exists(dir):
+        if dir == "./":
+            pass
+        else:
+            if recover == "N":
+                print(f"warning {dir} exist")
+            else:
+                print(f"warning {dir} will be recovered")
+                os.rmdir(dir)
+                os.mkdir(dir)
+    else:
+        os.mkdir(dir)
+
+
+def run():
+
+    argparse_annogtf = argparse.ArgumentParser(description="gtf file process tools")
+    argparse_annogtf.add_argument("-t", "--type", choices=["searchs", "maps"], dest="type",
+                                 help="process type 'searchs' or 'maps'")
+    argparse_annogtf.add_argument("-l", "--location", dest="loc",help="location, like 'chr:start:end'")
+    argparse_annogtf.add_argument("-g", "--gtf", dest="gtf",help="gtf file")
+    argparse_annogtf.add_argument("-gs", "--genes", dest="genes",help="genes")
+    argparse_annogtf.add_argument("-m", "--mapType", dest="map", choices=["i2n", "n2i"], help="mapType")
+    argparse_annogtf.add_argument("-gf", "--genes_file", dest="genes_file",help="genes file")
+    argparse_annogtf.add_argument("-o", "--out", dest="out",help="out file name")
+    argparse_annogtf.add_argument("-od", "--out_dir", default="./", dest="out_dir",help="out dir")
+    argparse_annogtf.add_argument("-am", "--anno_map", default=None, dest="anno_map",help="anno map")
+    
+    args = argparse_annogtf.parse_args()
+
+    Mk_no_dir(args.out_dir)
+
+    if args.type == "searchs":
+        gtf = GTF()
+        gtf.read(args.gtf, args.anno_map)
+        geneid_list = gtf.searchs(args.loc)
+        with open(f"{args.out_dir}/{args.out}.tsv", "w") as f:
+            f.write("id\tname\tchr\tstart\tend\tstrand\n")
+            for geneid in geneid_list:
+                gene = gtf.genes[geneid]
+                f.write("\t".join([gene.id, gene.name, gene.chr, gene.start, gene.end, gene.strand]) + "\n")
+    elif args.type == "maps":
+        gtf = GTF()
+        gtf.read(args.gtf, args.anno_map)
+        if args.genes:
+            dict_map = gtf.maps(args.genes, args.map)
+        elif args.genes_file:
+            genes = ""
+            with open(args.genes_file, "r") as f1:
+                for line in f1:
+                    if line.startswith("#"):
+                        pass
+                    else:
+                        genes = genes + ";" + line.strip()
+            dict_map = gtf.maps(genes, args.map)
+        else:
+            raise ValueError("params err: please check 'genes' or 'genes_file'!")
+        
+        with open(f"{args.out_dir}/{args.out}.tsv", "w") as f:
+            f.write("id\tname\n")
+            if args.map == "i2n":
+                for id, name in dict_map:
+                    f.write(f"{id}\t{name}\n")
+            else:
+                for name, id in dict_map:
+                    f.write(f"{name}\t{id}\n")
+    else:
+        raise ValueError("params err: please check 'type'!")
+
+    return
+
+
+
+if __name__ == '__main__':
+    run()

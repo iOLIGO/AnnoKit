@@ -13,9 +13,9 @@ gtf.name
 
 more info: The three parameters `name`, `version` and `URL` are all optional parameters. The main purpose is to record the relevant information of the gtf file.
 
-## class
+### class
 
-### BASE
+#### BASE
 
 CDS, start_codon, stop_codon, UTR5, UTR3, other and other annotation types use this class.
 
@@ -29,7 +29,7 @@ CDS, start_codon, stop_codon, UTR5, UTR3, other and other annotation types use t
 more info: The attribute value of `BASE` is readable. That is, after reading from the gtf file for the first time, it cannot be modified.
 
 
-### EXON
+#### EXON
 
 Record exon related information.
 
@@ -44,7 +44,7 @@ Record exon related information.
 more info: The attribute value of `EXON` is readable. That is, after reading from the gtf file for the first time, it cannot be modified.
 
 
-### TRANSCRIPT
+#### TRANSCRIPT
 
 Record transcript related information.
 
@@ -65,7 +65,7 @@ Record transcript related information.
 |other|List\[BASE\]|transcript other annotation types|
 
 
-### GENE
+#### GENE
 
 Record gene related information.
 
@@ -81,7 +81,7 @@ Record gene related information.
 |trans_map|Dict\[TRANSCRIPT.name] = TRANSCRIPT.id| map of id and name|
 
 
-### GTF
+#### GTF
 
 Parse GTF files
 
@@ -95,7 +95,7 @@ Parse GTF files
 |genes_interval|Dict\[chromosome]=IntervalTree|genes location projects to IntervalTree|
 
 
-#### interval search
+##### interval search
 
 [intervaltree](https://github.com/chaimleib/intervaltree): a mutable, self-balancing interval tree for Python 2 and 3. Queries may be by point, by range overlap, or by range envelopment.
 
@@ -105,7 +105,7 @@ gtf = GTF()
 gtf_file = "./test/test.gtf"
 gtf.read(gtf_file, name="test", version="1.0", URL="none")
 loc = "chr1:1000:5000"
-genes = gtf.search(loc)
+genes = gtf.searchs(loc)
 genes
 # '[geneid1, geneid2, ..., geneidn]'
 ```
@@ -113,7 +113,7 @@ genes
 more info: The location parameter consists of the chromosome, starting position, and ending position, with a colon between them, like '`{chr}:{start}:{end}`'.
 
 
-#### name2id or id2name
+##### name2id or id2name
 
 Convert gene name and id to each other
 
@@ -133,12 +133,15 @@ gtf.maps(genes_id, 'i2n')
 # "{'geneid1':'genename1', 'geneid2':'genename2'}"
 ```
 
+- genes_id: `{geneid1;geneid2;...;geneidN}`
 
-#### annotation type map
+- genes_name: `{genename1;genename2;...;genenameN}`
+
+##### annotation type map
 
 annotation type map, the corresponding description relationship between annotation attributes and annotation types description in annotation files.
 
-##### raw map table
+###### raw map table
 
 |Attributes|description|
 |:--------:|:---------:|
@@ -155,7 +158,7 @@ annotation type map, the corresponding description relationship between annotati
 more info: `other` is an additional reserved attribute for reading special cases that do not exist in the table but exist in the gtf file.
 
 
-##### map table description content replacement
+###### map table description content replacement
 
 ```python
 from annokit.gtf import GTF
@@ -170,9 +173,25 @@ gtf.anno_map
 more info: anno_map can modify the gtf description corresponding to multiple attributes at the same time, separated by semicolons, and the attributes and descriptions are separated by commas, like '`{attributes1},{description1};{attributes2},{description2};...;{attributesN},{descriptionN}`'
 
 
+## python CLI
 
 
+### interval search
 
+```shell
+AnnoGtf -t searchs -g test.gtf -l chr1:1000:5000 -o test -od ./ -am UTR5,UTR5;other,other_anno
+```
+
+### name2id or id2name
+
+```shell
+# genes
+AnnoGtf -t maps -g test.gtf -m i2n -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5;other,other_anno
+# genes file
+AnnoGtf -t maps -g test.gtf -m n2i -gf genename.tsv -o test -od ./ -am UTR5,UTR5;other,other_anno
+```
+
+more info: genes file consists of gene name or gene id, one for each line.
 
 
 

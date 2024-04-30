@@ -1,6 +1,6 @@
-# gtf_tools
-gtf tools
+# AnnoKit
 
+Reference genome annotation file processing toolset
 
 ## gene structure
 
@@ -22,6 +22,6 @@ gtf tools
 
 ## GTF
 
-- [API]()
-- [CLI]()
+gtf file analysis
 
+- [GTF](https://github.com/iOLIGO/AnnoKit/blob/main/docs/GTF.md)

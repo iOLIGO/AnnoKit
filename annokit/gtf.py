@@ -157,7 +157,17 @@ class GTF:
     def add_err(self, err:str):
         self.err.append(err)
     
-    def read(self, gtf, name=None, version=None, URL=None):
+    def read(self, gtf, name=None, version=None, URL=None, anno_map=None):
+
+        if anno_map:
+            for bases in anno_map.split(";"):
+                name = bases[0]
+                gtf_str = bases[1]
+                if name in self.anno_map:
+                    self.anno_map[name] = gtf_str
+                else:
+                    warnings.warn(f"annotation map err: {name}; maby use key words 'other'", Warning)
+
         self.name = name
         self.version = version
         self.URL = URL
@@ -246,7 +256,7 @@ class GTF:
         return
     
     # loc = chr:start:end
-    def searchLoc(self, loc):
+    def searchs(self, loc):
         chrn, start, end = loc.split(":")
         start = int(start)
         end = int(end)
