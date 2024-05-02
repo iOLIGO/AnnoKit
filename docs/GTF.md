@@ -209,9 +209,9 @@ gtf.maps(genes_id, 'i2n')
 # "{'geneid1':'genename1', 'geneid2':'genename2'}"
 ```
 
-- genes_id: `{geneid1;geneid2;...;geneidN}`
+- genes_id: `geneid1;geneid2;...;geneidN`
 
-- genes_name: `{genename1;genename2;...;genenameN}`
+- genes_name: `genename1;genename2;...;genenameN`
 
 
 
