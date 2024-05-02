@@ -113,6 +113,44 @@ genes
 more info: The location parameter consists of the chromosome, starting position, and ending position, with a colon between them, like '`{chr}:{start}:{end}`'.
 
 
+##### gene inquires
+
+Use the gene ID or name to query the related information of the gene in the gtf file, and output it in the DataFrame format of pandas.
+
+```python
+from annokit.gtf import GTF
+gtf = GTF()
+gtf_file = "./test/test.gtf"
+gtf.read(gtf_file, name="test", version="1.0", URL="none")
+genes_name = "genename1;genename2"
+gtf.inquires(genes_name, itype="name", ilevel="gene")
+geneids = "geneid1;geneid2;geneid3"
+gtf.inquires(geneids, itype="id", ilevel="exon")
+```
+
+|ilevel|gene|trans|exon|
+|:---:|:---:|:---:|:--:|
+|geneid|✓|✓|✓|
+|genename|✓|✓|✓|
+|chr|✓|✓|✓|
+|start|✓|✓|✓|
+|end|✓|✓|✓|
+|strand|✓|✓|✓|
+|transid|✕|✓|✓|
+|transname|✕|✓|✓|
+|transstart|✕|✓|✓|
+|transend|✕|✓|✓|
+|exonid|✕|✕|✓|
+|exonstart|✕|✕|✓|
+|exonend|✕|✕|✓|
+
+If the corresponding information is missing, the replacement rules are as follows:
+
+- str: String types are replaced by `-`, such as `id`, `name`, `chr`, `strand` and other attributes.
+
+- int: The int data type is replaced by `0`, such as `start`, `end` and other attributes.
+
+
 ##### name2id or id2name
 
 Convert gene name and id to each other
@@ -123,6 +161,7 @@ from annokit.gtf import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 genes_name = "genename1;genename2"
+gtf.read(gtf_file, name="test", version="1.0", URL="none")
 gtf.maps(genes_name, mapType='n2i')
 # Warning: not found genename genename2 in gtf
 # "{'genename1':'geneid1', 'genename2':'None'}"
@@ -194,4 +233,12 @@ AnnoGtf -t maps -g test.gtf -m n2i -gf genename.tsv -o test -od ./ -am UTR5,UTR5
 more info: genes file consists of gene name or gene id, one for each line.
 
 
+### gene inquires
 
+```shell
+# genesid
+AnnoGtf -t inquires -g test.gtf -it id -il gene -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5;other,other_anno
+# genesname file
+AnnoGtf -t inquires -g test.gtf -it name -il exon -gf genename.tsv -o test -od ./ -am UTR5,UTR5;other,other_anno
+
+```

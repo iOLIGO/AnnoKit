@@ -305,13 +305,22 @@ class GTF:
         list_strand = []
         if ilevel == "gene":
             for geneid in geneid_list:
-                gene = self.genes[geneid]
-                list_geneid.append(gene.id)
-                list_genename.append(gene.name)
-                list_chr.append(gene.chr)
-                list_start.append(gene.start)
-                list_end.append(gene.end)
-                list_strand.append(gene.strand)
+                if geneid in self.genes:
+                    gene = self.genes[geneid]
+                    list_geneid.append(gene.id)
+                    list_genename.append(gene.name)
+                    list_chr.append(gene.chr)
+                    list_start.append(gene.start)
+                    list_end.append(gene.end)
+                    list_strand.append(gene.strand)
+                else:
+                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
+                    list_geneid.append("-")
+                    list_genename.append("-")
+                    list_chr.append("-")
+                    list_start.append(0)
+                    list_end.append(0)
+                    list_strand.append("-")
             df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
                                "chr":list_chr, "start":list_start,
                                "end":list_end, "strand":list_strand})
@@ -321,18 +330,40 @@ class GTF:
             list_transstart = []
             list_transend = []
             for geneid in geneid_list:
-                gene = self.genes[geneid]
-                for transid, trans in gene.trans:
-                    list_geneid.append(gene.id)
-                    list_genename.append(gene.name)
-                    list_chr.append(gene.chr)
-                    list_start.append(gene.start)
-                    list_end.append(gene.end)
-                    list_strand.append(gene.strand)
-                    list_transid.append(trans.id)
-                    list_transname.append(trans.name)
-                    list_transstart.append(trans.start)
-                    list_transend.append(trans.end)
+                if geneid in self.genes:
+                    gene = self.genes[geneid]
+                    if len(gene.trans) >0:
+                        for transid, trans in gene.trans:
+                            list_geneid.append(gene.id)
+                            list_genename.append(gene.name)
+                            list_chr.append(gene.chr)
+                            list_start.append(gene.start)
+                            list_end.append(gene.end)
+                            list_strand.append(gene.strand)
+                            list_transid.append(trans.id)
+                            list_transname.append(trans.name)
+                            list_transstart.append(trans.start)
+                            list_transend.append(trans.end)
+                    else:
+                        warnings.warn(f"not found transcripts of {geneid} in gtf", Warning)
+                        list_geneid.append(gene.id)
+                        list_genename.append(gene.name)
+                        list_chr.append(gene.chr)
+                        list_start.append(gene.start)
+                        list_end.append(gene.end)
+                        list_strand.append(gene.strand)
+                        list_transid.append("-")
+                        list_transname.append("-")
+                        list_transstart.append(0)
+                        list_transend.append(0)
+                else:
+                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
+                    list_geneid.append("-")
+                    list_genename.append("-")
+                    list_chr.append("-")
+                    list_start.append(0)
+                    list_end.append(0)
+                    list_strand.append("-")
             df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
                                "chr":list_chr, "start":list_start,
                                "end":list_end, "strand":list_strand,
@@ -347,22 +378,61 @@ class GTF:
             list_exonstart = []
             list_exonend = []
             for geneid in geneid_list:
-                gene = self.genes[geneid]
-                for transid, trans in gene.trans:
-                    for exonid, exon in trans.exons:
+                if geneid in self.genes:
+                    gene = self.genes[geneid]
+                    if len(gene.trans) >0:
+                        for transid, trans in gene.trans:
+                            if len(trans.exons) >0:
+                                for exonid, exon in trans.exons:
+                                    list_geneid.append(gene.id)
+                                    list_genename.append(gene.name)
+                                    list_chr.append(gene.chr)
+                                    list_start.append(gene.start)
+                                    list_end.append(gene.end)
+                                    list_strand.append(gene.strand)
+                                    list_transid.append(trans.id)
+                                    list_transname.append(trans.name)
+                                    list_transstart.append(trans.start)
+                                    list_transend.append(trans.end)
+                                    list_exonid.append(exon.id)
+                                    list_exonstart.append(exon.start)
+                                    list_exonend.append(exon.end)
+                            else:
+                                warnings.warn(f"not found exon of {transid} of {geneid} in gtf", Warning)
+                                list_geneid.append(gene.id)
+                                list_genename.append(gene.name)
+                                list_chr.append(gene.chr)
+                                list_start.append(gene.start)
+                                list_end.append(gene.end)
+                                list_strand.append(gene.strand)
+                                list_transid.append(trans.id)
+                                list_transname.append(trans.name)
+                                list_transstart.append(trans.start)
+                                list_transend.append(trans.end)
+                                list_exonid.append("-")
+                                list_exonstart.append(0)
+                                list_exonend.append(0)
+                    else:
+                        warnings.warn(f"not found transcripts of {geneid} in gtf", Warning)
                         list_geneid.append(gene.id)
                         list_genename.append(gene.name)
                         list_chr.append(gene.chr)
                         list_start.append(gene.start)
                         list_end.append(gene.end)
                         list_strand.append(gene.strand)
-                        list_transid.append(trans.id)
-                        list_transname.append(trans.name)
-                        list_transstart.append(trans.start)
-                        list_transend.append(trans.end)
-                        list_exonid.append(exon.id)
-                        list_exonid.append(exon.start)
-                        list_exonid.append(exon.end)
+                        list_transid.append("-")
+                        list_transname.append("-")
+                        list_transstart.append(0)
+                        list_transend.append(0)
+                else:
+                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
+                    list_geneid.append("-")
+                    list_genename.append("-")
+                    list_chr.append("-")
+                    list_start.append(0)
+                    list_end.append(0)
+                    list_strand.append("-")
+                        
             df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
                                "chr":list_chr, "start":list_start,
                                "end":list_end, "strand":list_strand,
@@ -371,7 +441,7 @@ class GTF:
                                "exonid":list_exonid, "exonstart":list_exonstart,
                                "exonend":list_exonend})
         else:
-            raise ValueError("params err: please check exon")
+            raise ValueError("params err: please check ilevel")
         return df 
 
 
