@@ -1,0 +1,3 @@
+*.egg-info
+test_data
+*checkpoint.ipynb

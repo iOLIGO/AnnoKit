@@ -191,7 +191,7 @@ class GTF:
                     
                     gene = GENE(bases_dict["gene_id"], gene_name, chrn, start, end, strand)
                 
-                elif anno_type == self.anno_map["transcript"]:
+                elif anno_type == self.anno_map["trans"]:
                     # transcript name
                     if "transcript_name" in bases_dict:
                         trans_name = bases_dict["transcript_name"]
@@ -226,12 +226,12 @@ class GTF:
                     trans_id = bases_dict["transcript_id"]
                     gene.trans[trans_id].add_stop_codon(stop_codon)
                 
-                elif anno_type == self.anno_map["five_prime_utr"]:
+                elif anno_type == self.anno_map["UTR5"]:
                     utr5 = BASE(chrn, start, end, strand)
                     trans_id = bases_dict["transcript_id"]
                     gene.trans[trans_id].add_UTR5(utr5)
                 
-                elif anno_type == self.anno_map["three_prime_utr"]:
+                elif anno_type == self.anno_map["UTR3"]:
                     utr3 = BASE(chrn, start, end, strand)
                     trans_id = bases_dict["transcript_id"]
                     gene.trans[trans_id].add_UTR3(utr3)
@@ -261,7 +261,14 @@ class GTF:
         chrn, start, end = loc.split(":")
         start = int(start)
         end = int(end)
-        return self.genes_interval[chrn](start, end)
+        if chrn in self.genes_interval:
+            return self.genes_interval[chrn][start:end]
+        elif chrn.split("chr")[0] in self.genes_interval:
+            return self.genes_interval[chrn.split("chr")[0]][start:end]
+        elif f"chr{chrn}" in self.genes_interval:
+            return self.genes_interval[f"chr{chrn}"][start:end]
+        else:
+            warnings.warn(f"not found chr {chrn} in gtf", Warning)
 
 
     # genes = {genename1};{genename2};...;{genenameN}

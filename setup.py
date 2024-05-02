@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 import re
+import glob
 
 
 classifiers = [
@@ -55,7 +56,7 @@ setup(
     keywords=keywords,
     url='https://github.com/iOLIGO/AnnoKit',
     packages=find_packages(),
-    scripts=['scripts/*'],
+    scripts=glob.glob('scripts/*'),
     include_package_data=True,
     zip_safe=False,
     classifiers=classifiers,

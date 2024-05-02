@@ -8,7 +8,7 @@ Reference genome annotation file processing toolset
 
 <div align="center">
 
-<img src="./docs/imgs/Gene_structure_eukaryote.png">
+<img src="./imgs/Gene_structure_eukaryote.png">
 
 </div>
 
@@ -16,7 +16,7 @@ Reference genome annotation file processing toolset
 
 <div align="center">
 
-<img src="./docs/imgs/Gene_structure_prokaryote.png">
+<img src="./imgs/Gene_structure_prokaryote.png">
 
 </div>
 

@@ -121,7 +121,6 @@ more info: anno_map can modify the gtf description corresponding to multiple att
 
 ```python
 from annokit.gtf import GTF
-from annokit.gtf import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 gtf.read(gtf_file, name="test", version="1.0", URL="none")
