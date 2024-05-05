@@ -141,8 +141,8 @@ class GTF:
                          "UTR3":"three_prime_utr", "other":"other"}
         if anno_map:
             for bases in anno_map.split(";"):
-                name = bases[0]
-                gtf_str = bases[1]
+                name = bases.split(",")[0]
+                gtf_str = bases.split(",")[1]
                 if name in self.anno_map:
                     self.anno_map[name] = gtf_str
                 else:
@@ -160,18 +160,18 @@ class GTF:
     
     def read(self, gtf, name=None, version=None, URL=None, anno_map=None):
 
-        if anno_map:
-            for bases in anno_map.split(";"):
-                name = bases[0]
-                gtf_str = bases[1]
-                if name in self.anno_map:
-                    self.anno_map[name] = gtf_str
-                else:
-                    warnings.warn(f"annotation map err: {name}; maby use key words 'other'", Warning)
-
         self.name = name
         self.version = version
         self.URL = URL
+
+        if anno_map:
+            for bases in anno_map.split(";"):
+                Tname = bases.split(",")[0]
+                gtf_str = bases.split(",")[1]
+                if Tname in self.anno_map:
+                    self.anno_map[Tname] = gtf_str
+                else:
+                    warnings.warn(f"annotation map err: {Tname}; maby use key words 'other'", Warning)
 
         blocks = Gtf_block(gtf)
 
@@ -262,11 +262,11 @@ class GTF:
         start = int(start)
         end = int(end)
         if chrn in self.genes_interval:
-            return self.genes_interval[chrn][start:end]
-        elif chrn.split("chr")[0] in self.genes_interval:
-            return self.genes_interval[chrn.split("chr")[0]][start:end]
+            return sorted(self.genes_interval[chrn][start:end])
+        elif chrn.split("chr")[1] in self.genes_interval:
+            return sorted(self.genes_interval[chrn.split("chr")[1]][start:end])
         elif f"chr{chrn}" in self.genes_interval:
-            return self.genes_interval[f"chr{chrn}"][start:end]
+            return sorted(self.genes_interval[f"chr{chrn}"][start:end])
         else:
             warnings.warn(f"not found chr {chrn} in gtf", Warning)
 
@@ -340,7 +340,7 @@ class GTF:
                 if geneid in self.genes:
                     gene = self.genes[geneid]
                     if len(gene.trans) >0:
-                        for transid, trans in gene.trans:
+                        for transid, trans in gene.trans.items():
                             list_geneid.append(gene.id)
                             list_genename.append(gene.name)
                             list_chr.append(gene.chr)
@@ -371,6 +371,10 @@ class GTF:
                     list_start.append(0)
                     list_end.append(0)
                     list_strand.append("-")
+                    list_transid.append("-")
+                    list_transname.append("-")
+                    list_transstart.append(0)
+                    list_transend.append(0)
             df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
                                "chr":list_chr, "start":list_start,
                                "end":list_end, "strand":list_strand,
@@ -388,9 +392,9 @@ class GTF:
                 if geneid in self.genes:
                     gene = self.genes[geneid]
                     if len(gene.trans) >0:
-                        for transid, trans in gene.trans:
+                        for transid, trans in gene.trans.items():
                             if len(trans.exons) >0:
-                                for exonid, exon in trans.exons:
+                                for exonid, exon in trans.exons.items():
                                     list_geneid.append(gene.id)
                                     list_genename.append(gene.name)
                                     list_chr.append(gene.chr)
@@ -431,6 +435,9 @@ class GTF:
                         list_transname.append("-")
                         list_transstart.append(0)
                         list_transend.append(0)
+                        list_exonid.append("-")
+                        list_exonstart.append(0)
+                        list_exonend.append(0)
                 else:
                     warnings.warn(f"not found geneid {geneid} in gtf", Warning)
                     list_geneid.append("-")
@@ -439,6 +446,13 @@ class GTF:
                     list_start.append(0)
                     list_end.append(0)
                     list_strand.append("-")
+                    list_transid.append("-")
+                    list_transname.append("-")
+                    list_transstart.append(0)
+                    list_transend.append(0)
+                    list_exonid.append("-")
+                    list_exonstart.append(0)
+                    list_exonend.append(0)
                         
             df = pd.DataFrame({"geneid":list_geneid, "genename":list_genename,
                                "chr":list_chr, "start":list_start,

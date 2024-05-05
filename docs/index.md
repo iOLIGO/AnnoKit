@@ -20,6 +20,13 @@ Reference genome annotation file processing toolset
 
 </div>
 
+## install
+
+```shell
+git clone git@github.com:iOLIGO/AnnoKit.git
+pip install AnnoKit/dist/AnnoKit-1.0.0.tar.gz
+```
+
 ## GTF
 
 gtf file analysis

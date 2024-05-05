@@ -80,6 +80,8 @@ Parse GTF files
 |genes|Dict\[GENE.id\]=GENE|gtf genes|
 |genes_map|Dict\[GENE.name\]=GENE.id|map of id and name|
 |genes_interval|Dict\[chromosome]=IntervalTree|genes location projects to IntervalTree|
+|err|List|Lines in gtf file that cannot be correctly recognized|
+|anno_map|Dict\[attributes\]=description|Commonly used gene structure attributes and their corresponding relationships described in gtf files|
 
 
 #### annotation type map
@@ -211,6 +213,11 @@ gtf.maps(genes_id, 'i2n')
 - genes_id: `geneid1;geneid2;...;geneidN`
 
 - genes_name: `genename1;genename2;...;genenameN`
+
+
+### jupyter sample
+
+[more usage](https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb):  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
 
 
 
