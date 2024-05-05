@@ -8,7 +8,7 @@ Reference genome annotation file processing toolset
 
 - maps: direct related query between gene name(symbol) and gene ID(Ensembl).
 
-- inquires: Given a gene name or id, query the detailed information of its corresponding gene, transcript, exon and other related gene structures.
+- inquires: given one or more gene names or IDs, query the detailed information of the corresponding genes, transcripts, exons and other related gene structures.
 
 
 ## gene structure
