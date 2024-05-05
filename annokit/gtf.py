@@ -1,5 +1,5 @@
 import types
-import warnings
+from loguru import logger
 from dataclasses import field, dataclass
 from typing import Any, List
 from intervaltree import IntervalTree, Interval
@@ -146,7 +146,7 @@ class GTF:
                 if name in self.anno_map:
                     self.anno_map[name] = gtf_str
                 else:
-                    warnings.warn(f"annotation map err: {name}; maby use key words 'other'", Warning)
+                    logger.warning(f"annotation map err: {name}; maby use key words 'other'")
 
 
     
@@ -171,7 +171,7 @@ class GTF:
                 if Tname in self.anno_map:
                     self.anno_map[Tname] = gtf_str
                 else:
-                    warnings.warn(f"annotation map err: {Tname}; maby use key words 'other'", Warning)
+                    logger.warning(f"annotation map err: {Tname}; maby use key words 'other'")
 
         blocks = Gtf_block(gtf)
 
@@ -242,7 +242,7 @@ class GTF:
                     gene.trans[trans_id].add_other(other)
                 
                 else:
-                    warnings.warn(f"annotation type err: {anno_type}", Warning)
+                    logger.warning(f"annotation type warning: {anno_type}")
                     self.add_err(line)
             
             self.add_gene(gene)
@@ -268,40 +268,41 @@ class GTF:
         elif f"chr{chrn}" in self.genes_interval:
             return sorted(self.genes_interval[f"chr{chrn}"][start:end])
         else:
-            warnings.warn(f"not found chr {chrn} in gtf", Warning)
+            logger.warning(f"not found chr {chrn} in gtf")
 
 
-    # genes = {genename1};{genename2};...;{genenameN}
+    # genes = {genename1},{genename2},...,{genenameN}
     def maps(self, genes, mapType="n2i"):
         dict_map = {}
         if mapType == "n2i":
-            for name in genes.split(";"):
+            for name in genes.split(","):
                 if name in self.genes_map:
                     dict_map[name] = self.genes_map[name]
                 else:
-                    warnings.warn(f"not found genename {name} in gtf", Warning)
+                    logger.warning(f"not found genename {name} in gtf")
                     dict_map[name] = "None"
 
         elif mapType == "i2n":
-            for id in genes.split(";"):
+            for id in genes.split(","):
                 if id in self.genes:
                     dict_map[id] = self.genes[id].name
                 else:
-                    warnings.warn(f"not found geneid {id} in gtf", Warning)
+                    logger.warning(f"not found geneid {id} in gtf")
                     dict_map[id] = "None"
         else:
             raise ValueError("params err: please check mapType!")
         return dict_map
     
 
-    # genes = {geneid1};{geneid2};...;{geneidN}
+    # genes = {geneid1},{geneid2},...,{geneidN}
     def inquires(self, genes, itype="id", ilevel="gene"):
 
         if itype == "id":
-            geneid_list = genes.split(";")
+            geneid_list = genes.split(",")
         elif itype == "name":
-            geneid_list = [self.genes_map[name] for name in genes.split(";")]
+            geneid_list = [self.genes_map[name] for name in genes.split(",")]
         else:
+            logger.error("params err: please check itype")
             raise ValueError("params err: please check mtype")
         
         list_geneid = []
@@ -321,8 +322,8 @@ class GTF:
                     list_end.append(gene.end)
                     list_strand.append(gene.strand)
                 else:
-                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
-                    list_geneid.append("-")
+                    logger.warning(f"not found geneid {geneid} in gtf")
+                    list_geneid.append(geneid)
                     list_genename.append("-")
                     list_chr.append("-")
                     list_start.append(0)
@@ -352,7 +353,7 @@ class GTF:
                             list_transstart.append(trans.start)
                             list_transend.append(trans.end)
                     else:
-                        warnings.warn(f"not found transcripts of {geneid} in gtf", Warning)
+                        logger.warning(f"not found transcripts of {geneid} in gtf")
                         list_geneid.append(gene.id)
                         list_genename.append(gene.name)
                         list_chr.append(gene.chr)
@@ -364,8 +365,8 @@ class GTF:
                         list_transstart.append(0)
                         list_transend.append(0)
                 else:
-                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
-                    list_geneid.append("-")
+                    logger.warning(f"not found geneid {geneid} in gtf")
+                    list_geneid.append(geneid)
                     list_genename.append("-")
                     list_chr.append("-")
                     list_start.append(0)
@@ -409,7 +410,7 @@ class GTF:
                                     list_exonstart.append(exon.start)
                                     list_exonend.append(exon.end)
                             else:
-                                warnings.warn(f"not found exon of {transid} of {geneid} in gtf", Warning)
+                                logger.warning(f"not found exon of {transid} of {geneid} in gtf")
                                 list_geneid.append(gene.id)
                                 list_genename.append(gene.name)
                                 list_chr.append(gene.chr)
@@ -424,7 +425,7 @@ class GTF:
                                 list_exonstart.append(0)
                                 list_exonend.append(0)
                     else:
-                        warnings.warn(f"not found transcripts of {geneid} in gtf", Warning)
+                        logger.warning(f"not found transcripts of {geneid} in gtf")
                         list_geneid.append(gene.id)
                         list_genename.append(gene.name)
                         list_chr.append(gene.chr)
@@ -439,8 +440,8 @@ class GTF:
                         list_exonstart.append(0)
                         list_exonend.append(0)
                 else:
-                    warnings.warn(f"not found geneid {geneid} in gtf", Warning)
-                    list_geneid.append("-")
+                    logger.warning(f"not found geneid {geneid} in gtf")
+                    list_geneid.append(geneid)
                     list_genename.append("-")
                     list_chr.append("-")
                     list_start.append(0)
@@ -462,6 +463,7 @@ class GTF:
                                "exonid":list_exonid, "exonstart":list_exonstart,
                                "exonend":list_exonend})
         else:
+            logger.error("params err: please check ilevel")
             raise ValueError("params err: please check ilevel")
         return df 
 

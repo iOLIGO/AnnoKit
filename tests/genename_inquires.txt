@@ -1,0 +1,4 @@
+# genename
+# one gene name per line
+ASTL
+IGKV2-10

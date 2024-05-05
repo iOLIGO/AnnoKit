@@ -205,19 +205,15 @@ gtf.maps(genes_name, mapType='n2i')
 # "{'genename1':'geneid1', 'genename2':'None'}"
 
 # i2n
-genes_id = "geneid1;geneid2"
+genes_id = "geneid1,geneid2"
 gtf.maps(genes_id, 'i2n')
 # "{'geneid1':'genename1', 'geneid2':'genename2'}"
 ```
 
-- genes_id: `geneid1;geneid2;...;geneidN`
+- genes_id: `geneid1,geneid2,...,geneidN`
 
-- genes_name: `genename1;genename2;...;genenameN`
+- genes_name: `genename1,genename2,...,genenameN`
 
-
-### jupyter sample
-
-more usage:  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
 
 
 
@@ -227,16 +223,17 @@ more usage:  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
 ### interval search
 
 ```shell
-AnnoGtf -t searchs -g test.gtf -l chr1:1000:5000 -o test -od ./ -am UTR5,UTR5;other,other_anno
+AnnoGtf -t searchs -g test.gtf -l chr1:1000:5000 -o test -od ./ -am UTR5,UTR5\;other,other_anno
 ```
+
 
 ### name2id or id2name
 
 ```shell
 # genes
-AnnoGtf -t maps -g test.gtf -m i2n -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5;other,other_anno
+AnnoGtf -t maps -g test.gtf -m i2n -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5\;other,other_anno
 # genes file
-AnnoGtf -t maps -g test.gtf -m n2i -gf genename.tsv -o test -od ./ -am UTR5,UTR5;other,other_anno
+AnnoGtf -t maps -g test.gtf -m n2i -gf genename.tsv -o test -od ./ -am UTR5,UTR5\;other,other_anno
 ```
 
 more info: genes file consists of gene name or gene id, one for each line.
@@ -246,8 +243,13 @@ more info: genes file consists of gene name or gene id, one for each line.
 
 ```shell
 # genesid
-AnnoGtf -t inquires -g test.gtf -it id -il gene -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5;other,other_anno
+AnnoGtf -t inquires -g test.gtf -it id -il gene -gs geneid1,genid2 -o test -od ./ -am UTR5,UTR5\;other,other_anno
 # genesname file
-AnnoGtf -t inquires -g test.gtf -it name -il exon -gf genename.tsv -o test -od ./ -am UTR5,UTR5;other,other_anno
+AnnoGtf -t inquires -g test.gtf -it name -il exon -gf genename.tsv -o test -od ./ -am UTR5,UTR5\;other,other_anno
 
 ```
+
+
+## jupyter sample
+
+more usage:  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
