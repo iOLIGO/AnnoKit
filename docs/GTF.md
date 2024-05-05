@@ -217,7 +217,7 @@ gtf.maps(genes_id, 'i2n')
 
 ### jupyter sample
 
-[more usage](https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb):  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
+more usage:  https://github.com/iOLIGO/AnnoKit/blob/main/tests/GTF.ipynb.
 
 
 
