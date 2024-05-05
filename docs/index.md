@@ -2,6 +2,14 @@
 
 Reference genome annotation file processing toolset
 
+## main functions
+
+- searchs: given a genome range, find genes within the range and related information about the gene.
+
+- maps: direct related query between gene name(symbol) and gene ID(Ensembl).
+
+- inquires: Given a gene name or id, query the detailed information of its corresponding gene, transcript, exon and other related gene structures.
+
 ## gene structure
 
 ### eukaryote
