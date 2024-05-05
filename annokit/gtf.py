@@ -290,7 +290,8 @@ class GTF:
                     logger.warning(f"not found geneid {id} in gtf")
                     dict_map[id] = "None"
         else:
-            raise ValueError("params err: please check mapType!")
+            logger.error("params err: please check mapType")
+            raise ValueError("params err: please check mapType")
         return dict_map
     
 
