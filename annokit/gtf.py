@@ -297,14 +297,18 @@ class GTF:
 
     # genes = {geneid1},{geneid2},...,{geneidN}
     def inquires(self, genes, itype="id", ilevel="gene"):
-
-        if itype == "id":
-            geneid_list = genes.split(",")
-        elif itype == "name":
-            geneid_list = [self.genes_map[name] for name in genes.split(",")]
+        
+        if genes == "all":
+            geneid_list = list(self.genes.keys())
+            logger.waring("all genes in gtf will be used with default!!!")
         else:
-            logger.error("params err: please check itype")
-            raise ValueError("params err: please check mtype")
+            if itype == "id":
+                geneid_list = genes.split(",")
+            elif itype == "name":
+                geneid_list = [self.genes_map[name] for name in genes.split(",")]
+            else:
+                logger.error("params err: please check itype")
+                raise ValueError("params err: please check mtype")
         
         list_geneid = []
         list_genename = []
