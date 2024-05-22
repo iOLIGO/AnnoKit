@@ -1,10 +1,4 @@
 
-<div align="center">
-
-<img src="./imgs/oligo_logo.png">
-
-</div>
-
 # AnnoKit
 
 Reference genome annotation file processing toolset
