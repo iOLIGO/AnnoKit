@@ -108,7 +108,7 @@ more info: `other` is an additional reserved attribute for reading special cases
 ##### map table description content replacement
 
 ```python
-from annokit.gtf import GTF
+from annokit import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 anno_map = "UTR5,UTR5;other,other_anno"
@@ -122,7 +122,7 @@ more info: anno_map can modify the gtf description corresponding to multiple att
 ## API
 
 ```python
-from annokit.gtf import GTF
+from annokit import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 gtf.read(gtf_file, name="test", version="1.0", URL="none")
@@ -138,7 +138,7 @@ more info: The three parameters `name`, `version` and `URL` are all optional par
 [intervaltree](https://github.com/chaimleib/intervaltree): a mutable, self-balancing interval tree for Python 2 and 3. Queries may be by point, by range overlap, or by range envelopment.
 
 ```python
-from annokit.gtf import GTF
+from annokit import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 gtf.read(gtf_file, name="test", version="1.0", URL="none")
@@ -156,7 +156,7 @@ more info: The location parameter consists of the chromosome, starting position,
 Use the gene ID or name to query the related information of the gene in the gtf file, and output it in the DataFrame format of pandas.
 
 ```python
-from annokit.gtf import GTF
+from annokit import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 gtf.read(gtf_file, name="test", version="1.0", URL="none")
@@ -195,7 +195,7 @@ Convert gene name and id to each other
 
 ```python
 # n2i
-from annokit.gtf import GTF
+from annokit import GTF
 gtf = GTF()
 gtf_file = "./test/test.gtf"
 genes_name = "genename1;genename2"
