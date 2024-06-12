@@ -11,11 +11,10 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: MIT License",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Topic :: Scientific/Engineering :: oligo",
-    "Topic :: Scientific/Engineering :: probes",
+    "Topic :: Scientific/Engineering :: Information Analysis"
 ]
 
 keywords = [
@@ -50,7 +49,7 @@ setup(
     author='cong wang',
     author_email='2119452560@qq.com',
     version=get_version(),
-    license='GPLv3',
+    license='MIT',
     description='annotation toolkit.',
     long_description=get_long_description(),
     keywords=keywords,

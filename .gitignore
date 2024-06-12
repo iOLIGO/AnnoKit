@@ -1,4 +1,12 @@
 *.egg-info
+
 test_data
+
 *checkpoint.ipynb
+
 *.ipynb_checkpoints
+
+build
+
+dist
+
